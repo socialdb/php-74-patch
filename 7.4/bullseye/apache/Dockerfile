@@ -155,7 +155,7 @@ RUN set -eux; \
 
 COPY docker-php-source /usr/local/bin/
 # patch https://github.com/php/php-src/pull/3917.diff
-COPY 3917.diff /
+COPY 1.diff /
 
 RUN set -eux; \
 	\
@@ -182,8 +182,8 @@ RUN set -eux; \
 	docker-php-source extract; \
 	cd /usr/src/php; \
 # ----------PATCH----------
-	patch -p1 < /3917.diff; \
-	rm /3917.diff; \
+	patch -p1 < /1.diff; \
+	rm /1.diff; \
 # ----------END_PATCH----------
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
