@@ -88,6 +88,8 @@ RUN set -eux; \
 	apk del --no-network .fetch-deps
 
 COPY docker-php-source /usr/local/bin/
+# patch https://github.com/php/php-src/pull/3917.diff
+COPY 1.diff /
 
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
@@ -117,6 +119,12 @@ RUN set -eux; \
 	; \
 	docker-php-source extract; \
 	cd /usr/src/php; \
+# ----------PATCH----------
+	apk add --no-cache patch; \
+	patch -p1 < /1.diff; \
+	rm /1.diff; \
+	apk del patch; \
+# ----------END_PATCH----------
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	./configure \
 		--build="$gnuArch" \
